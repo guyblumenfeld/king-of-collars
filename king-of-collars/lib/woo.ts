@@ -1,7 +1,7 @@
 import type { WooProduct, WooCategory, WpPost, WooPrices, WooDefaultAttribute } from "./types";
 
 // Direct WP base (used at build time / server-side fetches).
-export const WP_BASE = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://lightgreen-buffalo-540924.hostingersite.com";
+export const WP_BASE = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://checkout.kingofcollars.com";
 export const STORE_API = `${WP_BASE}/wp-json/wc/store/v1`;
 export const WP_API = `${WP_BASE}/wp-json/wp/v2`;
 
