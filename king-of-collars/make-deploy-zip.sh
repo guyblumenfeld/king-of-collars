@@ -16,7 +16,7 @@ ZIP="$DEPLOY_DIR/aluf-hakolarim-storefront-$STAMP.zip"
 # WordPress/WooCommerce backend origin the browser calls for live cart actions.
 # Baked into the static JS at build time. Override when a real domain is set up:
 #   NEXT_PUBLIC_WP_ORIGIN=https://shop.example.co.il ./make-deploy-zip.sh
-export NEXT_PUBLIC_WP_ORIGIN="${NEXT_PUBLIC_WP_ORIGIN:-https://lightgreen-buffalo-540924.hostingersite.com}"
+export NEXT_PUBLIC_WP_ORIGIN="${NEXT_PUBLIC_WP_ORIGIN:-https://checkout.kingofcollars.com}"
 echo "→ cart API origin: $NEXT_PUBLIC_WP_ORIGIN"
 
 # WC REST keys (WC_CONSUMER_KEY/SECRET) for build-time wc/v3 default_attributes
