@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --font-heebo is injected by next/font (self-hosted Heebo). */
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: theme("colors.paper");
+  color: theme("colors.ink");
+}
+
+/* Visible keyboard focus ring across interactive elements (a11y). */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid theme("colors.brand.DEFAULT");
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Accessibility widget modes (classes set on <html> by AccessibilityWidget).
+   Visual filters are scoped to #site-wrap so fixed floating buttons keep working
+   (filter creates a containing block for position:fixed descendants). */
+html.a11y-font-1 { font-size: 112.5%; }
+html.a11y-font-2 { font-size: 125%; }
+html.a11y-contrast #site-wrap { filter: contrast(1.25); }
+html.a11y-grayscale #site-wrap { filter: grayscale(1); }
+html.a11y-contrast.a11y-grayscale #site-wrap { filter: contrast(1.25) grayscale(1); }
+html.a11y-underline #site-wrap a { text-decoration: underline !important; }
+html.a11y-no-motion *,
+html.a11y-no-motion *::before,
+html.a11y-no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+html.a11y-no-motion { scroll-behavior: auto; }
+
+/* Render WP post/product HTML nicely, RTL */
+.wp-content {
+  line-height: 1.8;
+}
+.wp-content h2,
+.wp-content h3 {
+  font-weight: 700;
+  margin: 1.2em 0 0.5em;
+}
+.wp-content h4 {
+  font-weight: 700;
+  margin: 1em 0 0.4em;
+}
+.wp-content p {
+  margin: 0.7em 0;
+}
+.wp-content ul {
+  list-style: disc;
+  padding-inline-start: 1.5em;
+  margin: 0.7em 0;
+}
+.wp-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+.wp-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+.wp-content th,
+.wp-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+}
