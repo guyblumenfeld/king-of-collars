@@ -5,7 +5,7 @@ import { formatPrice } from "@/lib/woo";
 
 // Unlike the Store API calls in lib/cart.ts, this navigates the browser to a real WP page —
 // there's no /wpapi rewrite for bare "/", so it always needs the actual WP origin, dev or prod.
-const PUBLIC_WP = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://lightgreen-buffalo-540924.hostingersite.com";
+const PUBLIC_WP = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://checkout.kingofcollars.com";
 
 export default function CartPage() {
   const { cart, update, remove, loading } = useCart();
