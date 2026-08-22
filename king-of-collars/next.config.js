@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const WP = "https://mediumpurple-mongoose-433104.hostingersite.com";
+const WP = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://lightgreen-buffalo-540924.hostingersite.com";
 
 const nextConfig = {
   output: "export", // static export for Hostinger (PHP/Apache host, no Node)
