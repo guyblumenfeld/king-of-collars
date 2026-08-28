@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { WooProduct, WooCategory } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
 
@@ -10,13 +11,10 @@ export default function ProductsClient({
   products: WooProduct[];
   categories: WooCategory[];
 }) {
-  const [active, setActive] = useState<string>("all");
-
-  // honor ?cat=slug from the homepage tiles (read on mount; static-export friendly)
-  useEffect(() => {
-    const cat = new URLSearchParams(window.location.search).get("cat");
-    if (cat) setActive(cat);
-  }, []);
+  // honor ?cat=slug from the homepage tiles — useSearchParams (not window.location)
+  // so it reacts correctly to Next's client-side navigation, not just a hard page load.
+  const cat = useSearchParams().get("cat");
+  const [active, setActive] = useState<string>(cat ?? "all");
 
   const filtered =
     active === "all"

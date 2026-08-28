@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { listProducts, listCategories } from "@/lib/woo";
 import ProductsClient from "./ProductsClient";
 
@@ -9,5 +10,9 @@ export default async function ProductsPage() {
     listCategories(),
   ]);
   const cats = categories.filter((c) => c.count > 0);
-  return <ProductsClient products={products} categories={cats} />;
+  return (
+    <Suspense>
+      <ProductsClient products={products} categories={cats} />
+    </Suspense>
+  );
 }
