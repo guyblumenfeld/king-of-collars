@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Heebo } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
@@ -25,6 +26,20 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="he" dir="rtl" className={heebo.variable}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PNF2YEZ9DV"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PNF2YEZ9DV');
+          `}
+        </Script>
+      </head>
       <body className="font-sans min-h-screen flex flex-col">
         {/* keyboard skip-link for screen-reader / keyboard users */}
         <a
