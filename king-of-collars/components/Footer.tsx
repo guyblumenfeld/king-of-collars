@@ -21,12 +21,13 @@ export default function Footer() {
             <li><Link href="/about" className="hover:text-white transition">אודות</Link></li>
             <li><Link href="/blog" className="hover:text-white transition">הבלוג</Link></li>
             <li><Link href="/accessibility-statement" className="hover:text-white transition">הצהרת נגישות</Link></li>
+            <li><Link href="/terms" className="hover:text-white transition">תקנון ומדיניות פרטיות</Link></li>
           </ul>
         </div>
         <div>
           <div className="font-bold mb-3">משלוחים והחזרות</div>
           <p className="text-white/70 leading-relaxed">
-            משלוח חינם מעל ₪199 לנקודת חלוקה / ₪299 עד הבית.
+            משלוח חינם מעל ₪150 לנקודת חלוקה / ₪300 עד הבית.
             <br />
             אספקה 1–4 ימי עסקים · החזרה תוך 30 יום.
             <br />
