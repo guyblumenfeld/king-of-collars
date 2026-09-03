@@ -1,10 +1,10 @@
 "use client";
-import type { Address, Cart, OrderResponse } from "./types";
+import type { Cart } from "./types";
 
 // Where the WooCommerce Store API lives.
 // - In `next dev`, next.config.js rewrites "/wpapi/*" → the WP host (same-origin, no CORS).
-// - In the static production build, NEXT_PUBLIC_WP_ORIGIN is set (see make-deploy-zip.sh)
-//   so the browser calls the WP host directly. WP sends the right CORS headers for this.
+// - In the static production build, NEXT_PUBLIC_WP_ORIGIN is a Vercel env var so the
+//   browser calls the WP host directly. WP sends the right CORS headers for this.
 const PUBLIC_WP = process.env.NEXT_PUBLIC_WP_ORIGIN || "";
 const STORE = PUBLIC_WP ? `${PUBLIC_WP}/wp-json/wc/store/v1` : "/wpapi/wc/store/v1";
 
@@ -97,38 +97,4 @@ export const updateItem = async (key: string, quantity: number) => {
 export const removeItem = async (key: string) => {
   await ensureSession();
   return call("/cart/remove-item", { method: "POST", body: JSON.stringify({ key }) });
-};
-
-// --- Checkout (Phase 2) ---
-
-// Set the shipping address so Woo computes shipping_rates on the returned cart.
-export const updateCustomer = async (shipping: Address, billing?: Address) => {
-  await ensureSession();
-  return call("/cart/update-customer", {
-    method: "POST",
-    body: JSON.stringify({ shipping_address: shipping, billing_address: billing ?? shipping }),
-  });
-};
-
-export const selectShippingRate = async (rateId: string, packageId = 0) => {
-  await ensureSession();
-  return call("/cart/select-shipping-rate", {
-    method: "POST",
-    body: JSON.stringify({ package_id: packageId, rate_id: rateId }),
-  });
-};
-
-// Creates the WC order from the current cart. Payment is stubbed on "cod" until the
-// Hype hosted payment page is wired in (then: create order → redirect to Hype link).
-export const placeOrder = async (billing: Address, shipping: Address, customerNote: string) => {
-  await ensureSession();
-  return call<OrderResponse>("/checkout", {
-    method: "POST",
-    body: JSON.stringify({
-      billing_address: billing,
-      shipping_address: shipping,
-      customer_note: customerNote,
-      payment_method: "cod",
-    }),
-  });
 };
