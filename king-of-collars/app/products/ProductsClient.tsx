@@ -27,7 +27,7 @@ export default function ProductsClient({
 
       <div className="flex flex-wrap gap-2 mb-8">
         <FilterBtn label="הכול" on={active === "all"} onClick={() => setActive("all")} />
-        {categories.map((c) => (
+        {categories.filter((c) => c.slug !== "general").map((c) => (
           <FilterBtn key={c.id} label={c.name} on={active === c.slug} onClick={() => setActive(c.slug)} />
         ))}
       </div>

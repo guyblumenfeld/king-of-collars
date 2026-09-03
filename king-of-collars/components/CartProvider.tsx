@@ -19,6 +19,7 @@ interface Ctx {
   update: (key: string, qty: number) => Promise<void>;
   remove: (key: string) => Promise<void>;
   refresh: () => Promise<void>;
+  pendingKeys: Set<string>;
 }
 
 const CartContext = createContext<Ctx | null>(null);
@@ -48,6 +49,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   // Snapshot to roll back to if an optimistic call fails.
   const lastConfirmedCart = useRef<Cart | null>(null);
+  // Item keys with an in-flight update/remove — lets a single item show a
+  // busy state without freezing every other +/- button in the drawer.
+  const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
 
   const refresh = useCallback(async () => {
     try {
@@ -105,30 +109,66 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
   const update: Ctx["update"] = async (key, qty) => {
-    setLoading(true);
+    // Optimistic path: reflect the new quantity/total immediately, reconcile in the background.
+    const before = cart;
+    setCart((prev) => {
+      if (!prev) return prev;
+      const items = prev.items.map((it) => {
+        if (it.key !== key) return it;
+        const unitPrice = Number(it.prices.price) || 0;
+        return { ...it, quantity: qty, totals: { ...it.totals, line_total: String(unitPrice * qty) } };
+      });
+      const items_count = items.reduce((n, it) => n + it.quantity, 0);
+      return { ...prev, items, items_count };
+    });
+    setPendingKeys((prev) => new Set(prev).add(key));
+
     try {
       const fresh = await api.updateItem(key, qty);
       lastConfirmedCart.current = fresh;
       setCart(fresh);
+    } catch (e) {
+      setCart(before ?? lastConfirmedCart.current);
+      throw e;
     } finally {
-      setLoading(false);
+      setPendingKeys((prev) => {
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
     }
   };
   const remove: Ctx["remove"] = async (key) => {
-    setLoading(true);
+    // Optimistic path: drop the item immediately, reconcile in the background.
+    const before = cart;
+    setCart((prev) => {
+      if (!prev) return prev;
+      const items = prev.items.filter((it) => it.key !== key);
+      const items_count = items.reduce((n, it) => n + it.quantity, 0);
+      return { ...prev, items, items_count };
+    });
+    setPendingKeys((prev) => new Set(prev).add(key));
+
     try {
       const fresh = await api.removeItem(key);
       lastConfirmedCart.current = fresh;
       setCart(fresh);
+    } catch (e) {
+      setCart(before ?? lastConfirmedCart.current);
+      throw e;
     } finally {
-      setLoading(false);
+      setPendingKeys((prev) => {
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
     }
   };
 
   const count = cart?.items_count ?? 0;
 
   return (
-    <CartContext.Provider value={{ cart, loading, open, setOpen, add, update, remove, refresh }}>
+    <CartContext.Provider value={{ cart, loading, open, setOpen, add, update, remove, refresh, pendingKeys }}>
       {children}
       {/* Screen-reader announcement of cart state changes */}
       <div aria-live="polite" className="sr-only">

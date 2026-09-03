@@ -97,51 +97,10 @@ export interface CartItem {
 export interface Cart {
   items: CartItem[];
   items_count: number;
-  needs_shipping?: boolean;
-  shipping_rates?: { package_id: number; shipping_rates: ShippingRate[] }[];
   totals: {
     total_price: string;
     total_items: string;
-    total_shipping?: string;
     currency_minor_unit: number;
     currency_symbol: string;
   };
-}
-
-export interface ShippingRate {
-  rate_id: string; // e.g. "flat_rate:5"
-  name: string;
-  price: string; // minor units
-  currency_minor_unit: number;
-  selected: boolean;
-}
-
-export interface Address {
-  first_name: string;
-  last_name: string;
-  address_1: string;
-  address_2?: string;
-  city: string;
-  postcode?: string;
-  country: string; // "IL"
-  email?: string;
-  phone?: string;
-}
-
-// storefront/v1/pickup-points proxy of ship.co.il PickUpPointModel
-export interface PickupPoint {
-  PointNumber: string;
-  PointName: string;
-  PointType: string;
-  CityName: string;
-  StreetName: string;
-  HouseNumber: string;
-  Distance: number;
-  Phone?: string;
-}
-
-export interface OrderResponse {
-  order_id: number;
-  status: string;
-  order_key: string;
 }

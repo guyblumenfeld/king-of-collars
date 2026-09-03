@@ -1,15 +1,22 @@
 import Link from "next/link";
 import { listProducts, listCategories, listPosts } from "@/lib/woo";
 import ProductCard from "@/components/ProductCard";
-import { CollarIcon, ShirtIcon, BallIcon, PawIcon, TruckIcon, ReturnIcon, ShieldIcon } from "@/components/icons";
+import { CollarIcon, BallIcon, PawIcon, TruckIcon, ReturnIcon, ShieldIcon } from "@/components/icons";
 
 export const dynamic = "force-static";
 
 const CAT_ICON: Record<string, React.ComponentType<{ className?: string }>> = {
   "leashes-collars": CollarIcon,
-  clothing: ShirtIcon,
   toys: BallIcon,
   accessories: PawIcon,
+};
+
+// Raster icons (not SVG components) for categories added after the icon set above.
+// `clothing` above is stale — the category's real slug is `costumes`, so it's mapped here instead.
+const CAT_IMAGE: Record<string, string> = {
+  beds: "/icons/dog-bed.png",
+  "dog-cleaning": "/icons/dog-cleaning.png",
+  costumes: "/icons/costumes.png",
 };
 
 export default async function Home() {
@@ -18,7 +25,7 @@ export default async function Home() {
     listCategories(),
     listPosts(3),
   ]);
-  const cats = categories.filter((c) => c.count > 0);
+  const cats = categories.filter((c) => c.count > 0 && c.slug !== "general");
 
   return (
     <div>
@@ -30,7 +37,7 @@ export default async function Home() {
         <PawIcon className="absolute top-16 left-1/3 w-14 h-14 text-white/10 rotate-45" />
         <div className="relative max-w-content mx-auto px-4 py-20 md:py-28 text-center">
           <span className="inline-block bg-white/15 backdrop-blur rounded-full px-4 py-1.5 text-sm font-medium mb-5">
-            🇮🇱 משלוח חינם בקנייה מעל ₪199
+            🇮🇱 משלוח חינם בקנייה מעל ₪150
           </span>
           <h1 className="text-4xl md:text-6xl font-extrabold mb-5 leading-tight">
             כל מה שהכלב שלך צריך
@@ -62,6 +69,7 @@ export default async function Home() {
         <p className="text-center text-gray-500 mb-8">מצאו בדיוק את מה שהכלב שלכם אוהב</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {cats.map((c) => {
+            const image = CAT_IMAGE[c.slug];
             const Icon = CAT_ICON[c.slug] ?? PawIcon;
             return (
               <Link
@@ -69,8 +77,13 @@ export default async function Home() {
                 href={`/products/?cat=${c.slug}`}
                 className="group bg-white rounded-2xl p-7 text-center border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand/30 hover:-translate-y-0.5 transition"
               >
-                <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-brand/10 text-brand grid place-items-center group-hover:bg-brand group-hover:text-white transition">
-                  <Icon className="w-7 h-7" />
+                <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-brand/10 text-brand grid place-items-center group-hover:bg-brand group-hover:text-white transition overflow-hidden">
+                  {image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={image} alt="" className="w-9 h-9 object-contain" />
+                  ) : (
+                    <Icon className="w-7 h-7" />
+                  )}
                 </div>
                 <div className="font-bold">{c.name}</div>
                 <div className="text-xs text-gray-400 mt-0.5">{c.count} מוצרים</div>
