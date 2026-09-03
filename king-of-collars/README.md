@@ -24,7 +24,6 @@ npm run dev
 ```
 rm -rf out .next && npm run build
 ```
-`make-deploy-zip.sh` is the legacy Hostinger zip-deploy script — not used once on Vercel.
 
 ## Status (as of 2026-07-12, carried over from local project notes)
 - Phase 1 (catalog, cart, blog) — done, live on Hostinger.
