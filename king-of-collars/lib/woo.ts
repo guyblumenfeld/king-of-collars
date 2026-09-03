@@ -1,4 +1,4 @@
-import type { WooProduct, WooCategory, WpPost, WooPrices, WooDefaultAttribute } from "./types";
+import type { WooProduct, WooCategory, WpPost, WooPrices, WooDefaultAttribute, CartItem } from "./types";
 
 // Direct WP base (used at build time / server-side fetches).
 export const WP_BASE = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://checkout.kingofcollars.com";
@@ -75,6 +75,32 @@ function stringifyParams(p: Record<string, string | number>) {
   const out: Record<string, string> = {};
   for (const k in p) out[k] = String(p[k]);
   return out;
+}
+
+// Cheapest free-shipping threshold across delivery methods (pickup ₪150, home ₪300) —
+// used for the generic "X ₪ more for free shipping" nudge shown before checkout, where the
+// delivery method isn't chosen yet. See components/CheckoutForm.tsx RATES for the full table.
+export const FREE_SHIPPING_THRESHOLD = 150;
+
+// Rebuilds WooCommerce's own session cart server-side (see wp-snippets/checkout-endpoints.php,
+// #4) and hands the browser off to its native checkout — the Store API's Cart-Token only works
+// as a REST header, not on a plain page navigation, so there's no way to keep this cart in the
+// headless UI past this point.
+export function checkoutUrl(items: CartItem[]): string {
+  const payload = items.map((it) => ({
+    id: it.id,
+    qty: it.quantity,
+    variation: it.variation?.length ? it.variation : undefined,
+  }));
+  return `${WP_BASE}/?ahk_cart_load=${encodeURIComponent(JSON.stringify(payload))}`;
+}
+
+// "עוד X ₪ למשלוח חינם" nudge before the cheapest threshold, or a congrats message after.
+export function freeShippingMessage(totalPrice: string, currencyMinorUnit: number): string {
+  const subtotalMajor = Number(totalPrice) / Math.pow(10, currencyMinorUnit);
+  const remaining = FREE_SHIPPING_THRESHOLD - subtotalMajor;
+  if (remaining <= 0) return "זכאים למשלוח חינם! 🎉";
+  return `עוד ₪${Math.ceil(remaining)} למשלוח חינם 🚚`;
 }
 
 // ---- Price formatting (ILS, minor_unit usually 0 → "{n} ₪") ----
