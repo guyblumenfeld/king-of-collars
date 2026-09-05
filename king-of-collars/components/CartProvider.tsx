@@ -49,9 +49,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   // Snapshot to roll back to if an optimistic call fails.
   const lastConfirmedCart = useRef<Cart | null>(null);
-  // Item keys with an in-flight update/remove — lets a single item show a
+  // Item keys with an in-flight remove — lets a single item show a
   // busy state without freezing every other +/- button in the drawer.
   const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
+  // Debounce timers for rapid +/- clicks: one network call per item per pause,
+  // not one per click, so mashing the button doesn't queue up N round-trips.
+  const updateTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   const refresh = useCallback(async () => {
     try {
@@ -109,7 +112,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
   const update: Ctx["update"] = async (key, qty) => {
-    // Optimistic path: reflect the new quantity/total immediately, reconcile in the background.
+    // Optimistic path: reflect the new quantity/total immediately and always (every
+    // click updates local state), but debounce the server call so rapid +/- clicks
+    // collapse into one round-trip instead of one per click.
     const before = cart;
     setCart((prev) => {
       if (!prev) return prev;
@@ -121,22 +126,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const items_count = items.reduce((n, it) => n + it.quantity, 0);
       return { ...prev, items, items_count };
     });
-    setPendingKeys((prev) => new Set(prev).add(key));
 
-    try {
-      const fresh = await api.updateItem(key, qty);
-      lastConfirmedCart.current = fresh;
-      setCart(fresh);
-    } catch (e) {
-      setCart(before ?? lastConfirmedCart.current);
-      throw e;
-    } finally {
-      setPendingKeys((prev) => {
-        const next = new Set(prev);
-        next.delete(key);
-        return next;
-      });
-    }
+    const timers = updateTimers.current;
+    const existing = timers.get(key);
+    if (existing) clearTimeout(existing);
+    timers.set(
+      key,
+      setTimeout(async () => {
+        timers.delete(key);
+        try {
+          const fresh = await api.updateItem(key, qty);
+          lastConfirmedCart.current = fresh;
+          setCart(fresh);
+        } catch (e) {
+          setCart(before ?? lastConfirmedCart.current);
+        }
+      }, 400)
+    );
   };
   const remove: Ctx["remove"] = async (key) => {
     // Optimistic path: drop the item immediately, reconcile in the background.

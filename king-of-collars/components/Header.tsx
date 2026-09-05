@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <>
       <div className="bg-brand-dark text-white text-center text-sm py-2 px-3">
-        משלוח חינם בקנייה מעל ₪199 לנקודת חלוקה · אספקה תוך 1–4 ימי עסקים
+        משלוח חינם בקנייה מעל ₪150 לנקודת חלוקה · אספקה תוך 1-4 ימי עסקים
       </div>
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur shadow-sm">
         <div className="max-w-content mx-auto flex items-center justify-between gap-4 px-4 h-16">

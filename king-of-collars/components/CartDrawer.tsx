@@ -53,12 +53,12 @@ export default function CartDrawer() {
         {items.length > 0 && (
           <div className="p-4 border-t space-y-3">
             <p className="text-sm text-center text-brand font-semibold bg-brand/10 rounded-lg py-2">
-              {freeShippingMessage(cart!.totals.total_price, cart!.totals.currency_minor_unit)}
+              {freeShippingMessage(cart!.totals.total_items, cart!.totals.currency_minor_unit)}
             </p>
             <div className="flex justify-between font-bold">
               <span>סה״כ</span>
               <span>
-                {formatPrice(cart!.totals.total_price, {
+                {formatPrice(cart!.totals.total_items, {
                   currency_minor_unit: cart!.totals.currency_minor_unit,
                   currency_symbol: cart!.totals.currency_symbol,
                 })}
