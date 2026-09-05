@@ -44,7 +44,7 @@ export default async function Home() {
             <br className="hidden md:block" /> במקום אחד
           </h1>
           <p className="text-lg md:text-xl text-white/85 mb-9 max-w-xl mx-auto">
-            אביזרים איכותיים שנבחרו בקפידה — רצועות, קולרים, ביגוד ומשחקים
+            אביזרים איכותיים שנבחרו בקפידה - רצועות, קולרים, ביגוד ומשחקים
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link
@@ -156,7 +156,7 @@ export default async function Home() {
       <section className="max-w-content mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
           {[
-            { Icon: TruckIcon, title: "משלוח מהיר", sub: "אספקה תוך 1–4 ימי עסקים" },
+            { Icon: TruckIcon, title: "משלוח מהיר", sub: "אספקה תוך 1-4 ימי עסקים" },
             { Icon: ReturnIcon, title: "החזרה תוך 30 יום", sub: "אחריות מלאה על כל המוצרים" },
             { Icon: ShieldIcon, title: "תשלום מאובטח", sub: "קנייה בטוחה ומאובטחת" },
           ].map(({ Icon, title, sub }) => (
