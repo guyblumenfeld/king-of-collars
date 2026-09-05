@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "הצהרת נגישות — אלוף הקולרים",
+  title: "הצהרת נגישות - אלוף הקולרים",
   description: "הצהרת הנגישות של אתר אלוף הקולרים.",
 };
 
@@ -29,7 +29,7 @@ export default function AccessibilityStatementPage() {
       <h2>חריגות ידועות</h2>
       <p>
         אנו פועלים לשפר את נגישות האתר באופן שוטף. ייתכן שחלקים מסוימים באתר טרם הונגשו במלואם.
-        אם נתקלתם ברכיב שאינו נגיש — נשמח שתעדכנו אותנו ונטפל בכך בהקדם.
+        אם נתקלתם ברכיב שאינו נגיש - נשמח שתעדכנו אותנו ונטפל בכך בהקדם.
       </p>
 
       <h2>פנייה בנושא נגישות</h2>
@@ -38,7 +38,7 @@ export default function AccessibilityStatementPage() {
         <a href="https://wa.me/972543376605" className="text-brand underline" target="_blank" rel="noopener noreferrer">
           054-337-6605
         </a>{" "}
-        (ימים א׳–ה׳, 9:00–18:00). אנא ציינו את הדף ואת הבעיה שנתקלתם בה, ונחזור אליכם בהקדם.
+        (ימים א׳-ה׳, 9:00-18:00). אנא ציינו את הדף ואת הבעיה שנתקלתם בה, ונחזור אליכם בהקדם.
       </p>
 
       <p className="text-sm text-gray-500">הצהרת הנגישות עודכנה לאחרונה: יולי 2026.</p>

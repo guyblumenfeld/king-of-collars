@@ -5,8 +5,8 @@ import { PawIcon, ShieldIcon, TruckIcon } from "@/components/icons";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "אודות — אלוף הקולרים",
-  description: "מי אנחנו ולמה הקמנו את אלוף הקולרים — חנות ישראלית לאביזרים איכותיים לכלבים.",
+  title: "אודות - אלוף הקולרים",
+  description: "מי אנחנו ולמה הקמנו את אלוף הקולרים - חנות ישראלית לאביזרים איכותיים לכלבים.",
 };
 
 export default function AboutPage() {
@@ -21,20 +21,20 @@ export default function AboutPage() {
 
       <section className="max-w-3xl mx-auto px-4 py-12 space-y-6 leading-relaxed">
         <p>
-          <strong>אלוף הקולרים</strong> נולד מאהבה פשוטה לכלבים — ומהתסכול למצוא בארץ אביזרים
+          <strong>אלוף הקולרים</strong> נולד מאהבה פשוטה לכלבים - ומהתסכול למצוא בארץ אביזרים
           איכותיים במחיר הוגן. במקום מבחר אינסופי של מוצרים בינוניים, בחרנו לבנות קטלוג קטן
           ומוקפד: כל מוצר בחנות נבדק על ידינו, על הכלבים שלנו, לפני שהוא נכנס למדף.
         </p>
         <p>
           אנחנו עסק ישראלי קטן, והשירות אצלנו אישי באמת: שאלה על מידה? התלבטות בין שתי רצועות?
-          כתבו לנו בוואטסאפ ותקבלו תשובה מאדם, לא מבוט. ואם משהו לא מתאים — מחזירים תוך 30 יום,
+          כתבו לנו בוואטסאפ ותקבלו תשובה מאדם, לא מבוט. ואם משהו לא מתאים - מחזירים תוך 30 יום,
           בלי שאלות מיותרות.
         </p>
 
         <div className="grid md:grid-cols-3 gap-4 py-4">
           {[
             { Icon: PawIcon, title: "נבחר בקפידה", sub: "כל מוצר נבדק לפני שנכנס לקטלוג" },
-            { Icon: TruckIcon, title: "משלוח מהיר", sub: "1–4 ימי עסקים לכל הארץ" },
+            { Icon: TruckIcon, title: "משלוח מהיר", sub: "1-4 ימי עסקים לכל הארץ" },
             { Icon: ShieldIcon, title: "שירות אישי", sub: "מענה אנושי בוואטסאפ" },
           ].map(({ Icon, title, sub }) => (
             <div key={title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm text-center">
@@ -48,12 +48,12 @@ export default function AboutPage() {
         </div>
 
         <p>
-          אפשר גם לאסוף עצמאית מהנקודה שלנו — <strong>אור המדבר, קיבוץ אורים</strong> — ולחסוך את
+          אפשר גם לאסוף עצמאית מהנקודה שלנו - <strong>אור המדבר, קיבוץ אורים</strong> - ולחסוך את
           דמי המשלוח. אנחנו זמינים בוואטסאפ{" "}
           <a href="https://wa.me/972543376605" className="text-brand underline" target="_blank" rel="noopener noreferrer">
             054-337-6605
           </a>{" "}
-          בימים א׳–ה׳ בין 9:00 ל־18:00.
+          בימים א׳-ה׳ בין 9:00 ל־18:00.
         </p>
 
         <div className="text-center pt-4">
