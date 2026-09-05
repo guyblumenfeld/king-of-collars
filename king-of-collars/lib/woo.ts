@@ -15,6 +15,7 @@ async function getJSON<T>(url: string): Promise<T> {
 export async function listProducts(params: Record<string, string | number> = {}) {
   const q = new URLSearchParams({ per_page: "100", ...stringifyParams(params) });
   const products = await getJSON<WooProduct[]>(`${STORE_API}/products?${q}`);
+  products.sort((a, b) => Number(b.is_in_stock) - Number(a.is_in_stock));
   return withDefaultVariations(products);
 }
 
