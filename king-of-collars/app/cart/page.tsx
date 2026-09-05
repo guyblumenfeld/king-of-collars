@@ -19,7 +19,7 @@ export default function CartPage() {
       ) : (
         <>
           <p className="text-sm text-center text-brand font-semibold bg-brand/10 rounded-lg py-2.5 mb-4">
-            {freeShippingMessage(cart!.totals.total_price, cart!.totals.currency_minor_unit)}
+            {freeShippingMessage(cart!.totals.total_items, cart!.totals.currency_minor_unit)}
           </p>
           <div className="space-y-4">
             {items.map((it) => {
@@ -54,7 +54,7 @@ export default function CartPage() {
             <div className="flex justify-between text-lg font-bold mb-4">
               <span>סה״כ</span>
               <span>
-                {formatPrice(cart!.totals.total_price, {
+                {formatPrice(cart!.totals.total_items, {
                   currency_minor_unit: cart!.totals.currency_minor_unit,
                   currency_symbol: cart!.totals.currency_symbol,
                 })}
