@@ -94,10 +94,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         items_count: 0,
         totals: { total_price: "0", total_items: "0", currency_minor_unit: product.prices.currency_minor_unit, currency_symbol: product.prices.currency_symbol },
       };
+      const items = [...base.items, optimisticItem(product, qty, variation)];
+      const total_items = items.reduce((n, it) => n + Number(it.totals.line_total), 0);
+      const shipping = Number(base.totals.total_price) - Number(base.totals.total_items);
       return {
         ...base,
-        items: [...base.items, optimisticItem(product, qty, variation)],
+        items,
         items_count: base.items_count + qty,
+        totals: { ...base.totals, total_items: String(total_items), total_price: String(total_items + shipping) },
       };
     });
 
@@ -124,7 +128,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return { ...it, quantity: qty, totals: { ...it.totals, line_total: String(unitPrice * qty) } };
       });
       const items_count = items.reduce((n, it) => n + it.quantity, 0);
-      return { ...prev, items, items_count };
+      // Keep the displayed total in sync instantly too — it was only patched via
+      // items_count/line_total, so the "total" field lagged behind the per-item
+      // change until the debounced server call resolved.
+      const total_items = items.reduce((n, it) => n + Number(it.totals.line_total), 0);
+      const shipping = Number(prev.totals.total_price) - Number(prev.totals.total_items);
+      return {
+        ...prev,
+        items,
+        items_count,
+        totals: { ...prev.totals, total_items: String(total_items), total_price: String(total_items + shipping) },
+      };
     });
 
     const timers = updateTimers.current;
@@ -151,7 +165,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (!prev) return prev;
       const items = prev.items.filter((it) => it.key !== key);
       const items_count = items.reduce((n, it) => n + it.quantity, 0);
-      return { ...prev, items, items_count };
+      const total_items = items.reduce((n, it) => n + Number(it.totals.line_total), 0);
+      const shipping = Number(prev.totals.total_price) - Number(prev.totals.total_items);
+      return {
+        ...prev,
+        items,
+        items_count,
+        totals: { ...prev.totals, total_items: String(total_items), total_price: String(total_items + shipping) },
+      };
     });
     setPendingKeys((prev) => new Set(prev).add(key));
 
