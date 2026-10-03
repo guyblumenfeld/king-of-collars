@@ -100,7 +100,7 @@ export function checkoutUrl(items: CartItem[]): string {
 export function freeShippingMessage(totalPrice: string, currencyMinorUnit: number): string {
   const subtotalMajor = Number(totalPrice) / Math.pow(10, currencyMinorUnit);
   const remaining = FREE_SHIPPING_THRESHOLD - subtotalMajor;
-  if (remaining <= 0) return "זכאים למשלוח חינם! 🎉";
+  if (remaining <= 0) return "קיבלתם משלוח חינם! 🎉";
   return `עוד ₪${Math.ceil(remaining)} למשלוח חינם 🚚`;
 }
 
