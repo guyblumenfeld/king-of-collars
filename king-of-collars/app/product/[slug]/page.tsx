@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { listProducts, getProductBySlug, formatPrice } from "@/lib/woo";
 import AddToCart from "@/components/AddToCart";
@@ -5,9 +6,27 @@ import ProductGallery from "./ProductGallery";
 
 export const dynamic = "force-static";
 
+function plain(html: string) {
+  return html.replace(/<[^>]+>/g, "").trim();
+}
+
 export async function generateStaticParams() {
   const products = await listProducts({ per_page: 100 });
   return products.map((p) => ({ slug: p.slug }));
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const product = await getProductBySlug(params.slug);
+  if (!product) return {};
+  const title = `${product.name} - אלוף הקולרים`;
+  const description = plain(product.short_description || product.description).slice(0, 160);
+  const image = product.images?.[0]?.src;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/product/${product.slug}` },
+    openGraph: { title, description, images: image ? [image] : undefined },
+  };
 }
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
