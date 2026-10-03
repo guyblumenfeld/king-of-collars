@@ -5,6 +5,11 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "יצירת קשר - אלוף הקולרים",
   description: "פרטי יצירת קשר עם אלוף הקולרים - וואטסאפ, שעות פעילות ונקודת איסוף עצמי.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "יצירת קשר - אלוף הקולרים",
+    description: "פרטי יצירת קשר עם אלוף הקולרים - וואטסאפ, שעות פעילות ונקודת איסוף עצמי.",
+  },
 };
 
 export default function ContactPage() {
@@ -26,7 +31,7 @@ export default function ContactPage() {
           , בימים א׳-ה׳ בין 9:00 ל־18:00.
         </p>
         <p>
-          ניתן גם לאסוף הזמנה עצמאית מהנקודה שלנו - <strong>אור המדבר, קיבוץ אורים</strong> -
+          ניתן גם לאסוף הזמנה עצמאית מהנקודה שלנו - <strong>קיבוץ אורים</strong> -
           בתיאום מראש מול אותו מספר וואטסאפ.
         </p>
       </section>
