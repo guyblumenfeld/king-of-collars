@@ -1,9 +1,8 @@
-import type { WooProduct, WooCategory, WpPost, WooPrices, WooDefaultAttribute, CartItem } from "./types";
+import type { WooProduct, WooCategory, WooPrices, WooDefaultAttribute, CartItem } from "./types";
 
 // Direct WP base (used at build time / server-side fetches).
 export const WP_BASE = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://checkout.kingofcollars.com";
 export const STORE_API = `${WP_BASE}/wp-json/wc/store/v1`;
-export const WP_API = `${WP_BASE}/wp-json/wp/v2`;
 
 // ponytail: 3 tries w/ fixed 1s backoff — the build hits this 45+ times per product
 // page; one transient WP timeout/500 used to kill the whole static export.
@@ -68,16 +67,6 @@ async function withDefaultVariations(products: WooProduct[]): Promise<WooProduct
 
 export function listCategories() {
   return getJSON<WooCategory[]>(`${STORE_API}/products/categories?per_page=100`);
-}
-
-// ---- Blog (build-time) ----
-export function listPosts(perPage = 50) {
-  return getJSON<WpPost[]>(`${WP_API}/posts?per_page=${perPage}&_embed=wp:featuredmedia`);
-}
-export function getPostBySlug(slug: string) {
-  return getJSON<WpPost[]>(
-    `${WP_API}/posts?slug=${encodeURIComponent(slug)}&_embed=wp:featuredmedia`
-  ).then((r) => r[0]);
 }
 
 function stringifyParams(p: Record<string, string | number>) {

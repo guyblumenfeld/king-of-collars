@@ -72,17 +72,6 @@ export interface WooCategory {
   image?: WooImage | null;
 }
 
-export interface WpPost {
-  id: number;
-  slug: string;
-  title: { rendered: string };
-  excerpt: { rendered: string };
-  content: { rendered: string };
-  date: string;
-  featured_media: number;
-  _embedded?: { "wp:featuredmedia"?: { source_url: string }[] };
-}
-
 export interface CartItem {
   key: string;
   id: number;
