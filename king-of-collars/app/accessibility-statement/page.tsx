@@ -5,6 +5,11 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "הצהרת נגישות - אלוף הקולרים",
   description: "הצהרת הנגישות של אתר אלוף הקולרים.",
+  alternates: { canonical: "/accessibility-statement" },
+  openGraph: {
+    title: "הצהרת נגישות - אלוף הקולרים",
+    description: "הצהרת הנגישות של אתר אלוף הקולרים.",
+  },
 };
 
 export default function AccessibilityStatementPage() {
