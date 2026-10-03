@@ -1,9 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { listProducts, listCategories, listPosts } from "@/lib/woo";
+import { listProducts, listCategories } from "@/lib/woo";
+import { LOCAL_POSTS } from "@/lib/local-posts";
 import ProductCard from "@/components/ProductCard";
 import { CollarIcon, BallIcon, PawIcon, TruckIcon, ReturnIcon, ShieldIcon } from "@/components/icons";
 
 export const dynamic = "force-static";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const CAT_ICON: Record<string, React.ComponentType<{ className?: string }>> = {
   "leashes-collars": CollarIcon,
@@ -20,12 +24,12 @@ const CAT_IMAGE: Record<string, string> = {
 };
 
 export default async function Home() {
-  const [products, categories, posts] = await Promise.all([
+  const [products, categories] = await Promise.all([
     listProducts({ per_page: 8 }),
     listCategories(),
-    listPosts(3),
   ]);
   const cats = categories.filter((c) => c.count > 0 && c.slug !== "general");
+  const posts = LOCAL_POSTS.slice(0, 3);
 
   return (
     <div>
@@ -126,28 +130,22 @@ export default async function Home() {
             </Link>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
-            {posts.map((p) => {
-              const img = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
-              return (
-                <Link
-                  key={p.id}
-                  href={`/blog/${p.slug}/`}
-                  className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition flex flex-col"
-                >
-                  {img && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img} alt="" className="w-full h-44 object-cover group-hover:scale-105 transition" loading="lazy" />
-                  )}
-                  <div className="p-4 flex flex-col gap-2 flex-1">
-                    <h3
-                      className="font-bold leading-snug"
-                      dangerouslySetInnerHTML={{ __html: p.title.rendered }}
-                    />
-                    <span className="text-brand text-sm font-semibold mt-auto">קראו עוד ←</span>
-                  </div>
-                </Link>
-              );
-            })}
+            {posts.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/blog/${p.slug}/`}
+                className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition flex flex-col"
+              >
+                {p.image && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.image} alt="" className="w-full h-44 object-cover group-hover:scale-105 transition" loading="lazy" />
+                )}
+                <div className="p-4 flex flex-col gap-2 flex-1">
+                  <h3 className="font-bold leading-snug">{p.title}</h3>
+                  <span className="text-brand text-sm font-semibold mt-auto">קראו עוד ←</span>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       )}
@@ -156,7 +154,7 @@ export default async function Home() {
       <section className="max-w-content mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
           {[
-            { Icon: TruckIcon, title: "משלוח מהיר", sub: "אספקה תוך 1-4 ימי עסקים" },
+            { Icon: TruckIcon, title: "משלוח מהיר", sub: "אספקה תוך 1-5 ימי עסקים" },
             { Icon: ReturnIcon, title: "החזרה תוך 30 יום", sub: "אחריות מלאה על כל המוצרים" },
             { Icon: ShieldIcon, title: "תשלום מאובטח", sub: "קנייה בטוחה ומאובטחת" },
           ].map(({ Icon, title, sub }) => (

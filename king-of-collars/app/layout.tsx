@@ -18,11 +18,23 @@ const heebo = Heebo({
   variable: "--font-heebo",
 });
 
+const TITLE = "אלוף הקולרים - אביזרים איכותיים לכלבים";
+const DESCRIPTION = "רצועות, קולרים, ביגוד ומשחקים לכלבים. משלוח מהיר עד הבית.";
+
 export const metadata: Metadata = {
-  title: "אלוף הקולרים - אביזרים איכותיים לכלבים",
-  description: "רצועות, קולרים, ביגוד ומשחקים לכלבים. משלוח מהיר עד הבית.",
+  metadataBase: new URL("https://kingofcollars.com"),
+  title: TITLE,
+  description: DESCRIPTION,
   verification: {
     google: "mQy7dQ0dzY-TPzuu4Doht-E2FV7De6q6Qn9WAbW91Oo",
+  },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    siteName: "אלוף הקולרים",
+    locale: "he_IL",
+    type: "website",
+    images: ["/og-logo.png"],
   },
 };
 
