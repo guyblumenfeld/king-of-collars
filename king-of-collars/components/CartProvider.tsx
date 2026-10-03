@@ -55,6 +55,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Debounce timers for rapid +/- clicks: one network call per item per pause,
   // not one per click, so mashing the button doesn't queue up N round-trips.
   const updateTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  // Per-item request generation counter. Clearing a debounce timer doesn't cancel an
+  // already-in-flight fetch from an earlier click — without this, two rapid clicks can
+  // have their server responses resolve out of order and a stale one (e.g. qty=2) can
+  // overwrite the newer optimistic state (qty=3) after the fact, showing the count
+  // jump down then back up. Only the response matching the latest generation is applied.
+  const updateGen = useRef<Map<string, number>>(new Map());
 
   const refresh = useCallback(async () => {
     try {
@@ -144,15 +150,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const timers = updateTimers.current;
     const existing = timers.get(key);
     if (existing) clearTimeout(existing);
+
+    const gens = updateGen.current;
+    const myGen = (gens.get(key) ?? 0) + 1;
+    gens.set(key, myGen);
+
     timers.set(
       key,
       setTimeout(async () => {
         timers.delete(key);
         try {
           const fresh = await api.updateItem(key, qty);
+          // Discard this response if a newer click for the same item has since fired —
+          // otherwise an out-of-order server response can stomp the newer optimistic state.
+          if (gens.get(key) !== myGen) return;
           lastConfirmedCart.current = fresh;
           setCart(fresh);
         } catch (e) {
+          if (gens.get(key) !== myGen) return;
+          // ponytail: swallowed before, so a failed update-item (e.g. the known 409
+          // "cart item not found" issue) silently snapped the quantity back with no
+          // visible cause — at minimum log it so devtools/Vercel logs show why.
+          console.error("cart update-item failed, reverting:", e);
           setCart(before ?? lastConfirmedCart.current);
         }
       }, 400)
