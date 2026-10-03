@@ -21,6 +21,9 @@ const heebo = Heebo({
 export const metadata: Metadata = {
   title: "אלוף הקולרים - אביזרים איכותיים לכלבים",
   description: "רצועות, קולרים, ביגוד ומשחקים לכלבים. משלוח מהיר עד הבית.",
+  verification: {
+    google: "mQy7dQ0dzY-TPzuu4Doht-E2FV7De6q6Qn9WAbW91Oo",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

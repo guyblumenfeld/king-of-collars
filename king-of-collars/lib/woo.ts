@@ -5,10 +5,18 @@ export const WP_BASE = process.env.NEXT_PUBLIC_WP_ORIGIN || "https://checkout.ki
 export const STORE_API = `${WP_BASE}/wp-json/wc/store/v1`;
 export const WP_API = `${WP_BASE}/wp-json/wp/v2`;
 
-async function getJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { headers: { Accept: "application/json" } });
-  if (!res.ok) throw new Error(`Fetch failed ${res.status}: ${url}`);
-  return res.json() as Promise<T>;
+// ponytail: 3 tries w/ fixed 1s backoff — the build hits this 45+ times per product
+// page; one transient WP timeout/500 used to kill the whole static export.
+async function getJSON<T>(url: string, attempt = 1): Promise<T> {
+  try {
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
+    if (!res.ok) throw new Error(`Fetch failed ${res.status}: ${url}`);
+    return res.json() as Promise<T>;
+  } catch (e) {
+    if (attempt >= 3) throw e;
+    await new Promise((r) => setTimeout(r, 1000));
+    return getJSON<T>(url, attempt + 1);
+  }
 }
 
 // ---- Catalog (build-time) ----
@@ -100,7 +108,7 @@ export function checkoutUrl(items: CartItem[]): string {
 export function freeShippingMessage(totalPrice: string, currencyMinorUnit: number): string {
   const subtotalMajor = Number(totalPrice) / Math.pow(10, currencyMinorUnit);
   const remaining = FREE_SHIPPING_THRESHOLD - subtotalMajor;
-  if (remaining <= 0) return "זכאים למשלוח חינם! 🎉";
+  if (remaining <= 0) return "קיבלתם משלוח חינם! 🎉";
   return `עוד ₪${Math.ceil(remaining)} למשלוח חינם 🚚`;
 }
 
