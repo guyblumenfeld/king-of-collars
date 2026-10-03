@@ -50,8 +50,8 @@ export default function AboutPage() {
         <p>
           אפשר גם לאסוף עצמאית מהנקודה שלנו - <strong>אור המדבר, קיבוץ אורים</strong> - ולחסוך את
           דמי המשלוח. אנחנו זמינים בוואטסאפ{" "}
-          <a href="https://wa.me/972543376605" className="text-brand underline" target="_blank" rel="noopener noreferrer">
-            054-337-6605
+          <a href="https://wa.me/972553186689" className="text-brand underline" target="_blank" rel="noopener noreferrer">
+            055-318-6689
           </a>{" "}
           בימים א׳-ה׳ בין 9:00 ל־18:00.
         </p>
