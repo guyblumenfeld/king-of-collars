@@ -7,6 +7,11 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "אודות - אלוף הקולרים",
   description: "מי אנחנו ולמה הקמנו את אלוף הקולרים - חנות ישראלית לאביזרים איכותיים לכלבים.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "אודות - אלוף הקולרים",
+    description: "מי אנחנו ולמה הקמנו את אלוף הקולרים - חנות ישראלית לאביזרים איכותיים לכלבים.",
+  },
 };
 
 export default function AboutPage() {
@@ -20,10 +25,24 @@ export default function AboutPage() {
       </section>
 
       <section className="max-w-3xl mx-auto px-4 py-12 space-y-6 leading-relaxed">
+        <figure className="md:float-left md:ml-6 mb-4 w-full md:w-64 shrink-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/foster-dog.jpg"
+            alt="הכלב שהעלה את הרעיון לאלוף הקולרים"
+            className="w-full rounded-2xl shadow-sm object-cover aspect-square"
+          />
+        </figure>
         <p>
-          <strong>אלוף הקולרים</strong> נולד מאהבה פשוטה לכלבים - ומהתסכול למצוא בארץ אביזרים
-          איכותיים במחיר הוגן. במקום מבחר אינסופי של מוצרים בינוניים, בחרנו לבנות קטלוג קטן
-          ומוקפד: כל מוצר בחנות נבדק על ידינו, על הכלבים שלנו, לפני שהוא נכנס למדף.
+          הכל התחיל בכלב חמוד אחד שננטש והגיע לכלבייה - ואני לקחתי אותו לאומנה בבית שלי. רציתי
+          לקנות לו כמה אביזרים בסיסיים, ומה שגיליתי זעזע אותי: אפילו רצועה קצרה ופשוטה עלתה
+          בחנויות בארץ מעל 50 ש״ח, ושאר האביזרים היו יקרים עוד יותר.
+        </p>
+        <p>
+          מאותו רגע ידעתי שאני רוצה לפתוח חנות שעוזרת לאנשים לקבל תוך ימים ספורים את מה שהכלב
+          שלהם צריך - במחיר הוגן. דברים פשוטים כמו שקיות קקי ורצועות, וגם אביזרים שעוזרים לכלב
+          להיות רגוע ומאושר יותר - כמו לוחיות ליקוק, צעצועי האכלה איטית ועוד. כך נולד
+          <strong> אלוף הקולרים</strong>.
         </p>
         <p>
           אנחנו עסק ישראלי קטן, והשירות אצלנו אישי באמת: שאלה על מידה? התלבטות בין שתי רצועות?
@@ -34,7 +53,7 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-3 gap-4 py-4">
           {[
             { Icon: PawIcon, title: "נבחר בקפידה", sub: "כל מוצר נבדק לפני שנכנס לקטלוג" },
-            { Icon: TruckIcon, title: "משלוח מהיר", sub: "1-4 ימי עסקים לכל הארץ" },
+            { Icon: TruckIcon, title: "משלוח מהיר", sub: "1-5 ימי עסקים לכל הארץ" },
             { Icon: ShieldIcon, title: "שירות אישי", sub: "מענה אנושי בוואטסאפ" },
           ].map(({ Icon, title, sub }) => (
             <div key={title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm text-center">
@@ -48,8 +67,10 @@ export default function AboutPage() {
         </div>
 
         <p>
-          אפשר גם לאסוף עצמאית מהנקודה שלנו - <strong>אור המדבר, קיבוץ אורים</strong> - ולחסוך את
-          דמי המשלוח. אנחנו זמינים בוואטסאפ{" "}
+          אפשר גם לאסוף עצמאית - <strong>קיבוץ אורים</strong> - ולחסוך את
+          דמי המשלוח.
+          <br />
+          אנחנו זמינים בוואטסאפ{" "}
           <a href="https://wa.me/972553186689" className="text-brand underline" target="_blank" rel="noopener noreferrer">
             055-318-6689
           </a>{" "}
