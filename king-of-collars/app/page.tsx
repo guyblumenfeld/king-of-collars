@@ -24,10 +24,11 @@ const CAT_IMAGE: Record<string, string> = {
 };
 
 export default async function Home() {
-  const [products, categories] = await Promise.all([
-    listProducts({ per_page: 8 }),
+  const [allFeatured, categories] = await Promise.all([
+    listProducts({ per_page: 24 }),
     listCategories(),
   ]);
+  const products = allFeatured.slice(0, 8);
   const cats = categories.filter((c) => c.count > 0 && c.slug !== "general");
   const posts = LOCAL_POSTS.slice(0, 3);
 
