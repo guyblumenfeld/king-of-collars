@@ -24,6 +24,9 @@ export const LOCAL_POSTS = [
     excerpt:
       "גור חדש או כלב מבוגר שעדיין עושה צרכים בבית? הנה 15 טיפים מעשיים שיעזרו לכם ללמד אותו הרגלי שירותים נכונים, בסבלנות ובעקביות.",
     category: "טיפוח ובריאות",
-    image: "/images/dog-house-training.jpg" as string | null,
+    // ponytail: card uses a letterboxed/padded version so object-cover's wide h-44 box
+    // never crops the dog out of this portrait-oriented photo; post body uses the
+    // original full photo (app/blog/(posts)/stop-dog-peeing-at-home/page.tsx).
+    image: "/images/dog-house-training-card.jpg" as string | null,
   },
 ];
