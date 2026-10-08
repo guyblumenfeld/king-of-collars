@@ -13,12 +13,13 @@ const CATEGORY = "טיפוח ובריאות";
 const TITLE = "10 רעיונות להעסקת הכלב כשאתם לא בבית";
 const DESCRIPTION =
   "10 דרכים פשוטות וזולות להעסיק את הכלב כשאתם לא בבית - עצמות, משטחי ליקוק, צעצועי האכלה איטית וטריקים נוספים לכלב רגוע ומאושר.";
+const IMAGE = "/images/dog-busy.jpg";
 
 export const metadata: Metadata = {
   title: `${TITLE} - אלוף הקולרים`,
   description: DESCRIPTION,
   alternates: { canonical: "/blog/10-ways-to-keep-your-dog-busy" },
-  openGraph: { title: TITLE, description: DESCRIPTION },
+  openGraph: { title: TITLE, description: DESCRIPTION, images: [IMAGE] },
 };
 
 const CONTENT_PART1 = `
@@ -72,6 +73,8 @@ export default async function Post() {
       <Link href="/blog/" className="text-brand text-sm">← חזרה לבלוג</Link>
       <div className="mt-3"><CategoryBadge name={CATEGORY} /></div>
       <h1 className="text-3xl font-extrabold my-4">{TITLE}</h1>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={IMAGE} alt="" className="w-full rounded-2xl mb-6" />
       <div className="wp-content" dangerouslySetInnerHTML={{ __html: CONTENT_PART1 }} />
       {lickMat && (
         <div className="max-w-xs my-6">

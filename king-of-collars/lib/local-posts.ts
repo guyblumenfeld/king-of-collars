@@ -8,7 +8,7 @@ export const LOCAL_POSTS = [
     excerpt:
       "10 דרכים פשוטות וזולות להעסיק את הכלב כשאתם לא בבית - עצמות, משטחי ליקוק, צעצועי האכלה איטית וטריקים נוספים.",
     category: "טיפוח ובריאות",
-    image: null as string | null,
+    image: "/images/dog-busy.jpg" as string | null,
   },
   {
     slug: "how-to-choose-dog-collar",
@@ -17,5 +17,16 @@ export const LOCAL_POSTS = [
       "בחירת קולר לכלב היא החלטה חשובה יותר ממה שנדמה. הקולר הנכון משפיע על הנוחות, הבטיחות והבריאות של הכלב.",
     category: "טיפוח ובריאות",
     image: "/images/how-to-choose-dog-collar.jpg",
+  },
+  {
+    slug: "stop-dog-peeing-at-home",
+    title: "15 דרכים ללמד את הכלב שלכם לא לעשות צרכים בבית",
+    excerpt:
+      "גור חדש או כלב מבוגר שעדיין עושה צרכים בבית? הנה 15 טיפים מעשיים שיעזרו לכם ללמד אותו הרגלי שירותים נכונים, בסבלנות ובעקביות.",
+    category: "טיפוח ובריאות",
+    // ponytail: card uses a letterboxed/padded version so object-cover's wide h-44 box
+    // never crops the dog out of this portrait-oriented photo; post body uses the
+    // original full photo (app/blog/(posts)/stop-dog-peeing-at-home/page.tsx).
+    image: "/images/dog-house-training-card.jpg" as string | null,
   },
 ];
