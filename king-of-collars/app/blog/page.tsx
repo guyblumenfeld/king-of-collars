@@ -26,9 +26,11 @@ export default function BlogPage() {
             href={`/blog/${p.slug}/`}
             className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col"
           >
-            {p.image && (
+            {p.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={p.image} alt="" className="w-full h-44 object-cover" loading="lazy" />
+            ) : (
+              <div className="w-full h-44 bg-paper" aria-hidden="true" />
             )}
             <div className="p-4 flex flex-col gap-2 flex-1">
               <div><CategoryBadge name={p.category} /></div>
