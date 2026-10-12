@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { formatPrice, freeShippingMessage, checkoutUrl } from "@/lib/woo";
+import { cartItem, track } from "@/lib/analytics";
 
 export default function CartDrawer() {
   const { cart, open, setOpen, update, remove, pendingKeys } = useCart();
@@ -67,6 +68,7 @@ export default function CartDrawer() {
             {/* Plain <a>, not next/link: this leaves the SPA entirely for WP's native checkout. */}
             <a
               href={checkoutUrl(items)}
+              onClick={() => track("begin_checkout", items.map(cartItem))}
               className="block text-center bg-brand text-white rounded-full py-3 font-semibold hover:bg-brand-dark"
             >
               תשלום מהיר
