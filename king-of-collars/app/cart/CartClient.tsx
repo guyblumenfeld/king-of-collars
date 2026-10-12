@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { useCart } from "@/components/CartProvider";
+import { cartItem, track } from "@/lib/analytics";
 import { formatPrice, freeShippingMessage, checkoutUrl } from "@/lib/woo";
 import ProductCard from "@/components/ProductCard";
 import type { WooProduct } from "@/lib/types";
@@ -8,6 +10,15 @@ import type { WooProduct } from "@/lib/types";
 export default function CartClient({ recommended }: { recommended: WooProduct[] }) {
   const { cart, update, remove, pendingKeys } = useCart();
   const items = cart?.items ?? [];
+
+  // Fire once per page visit, when the real (non-optimistic) cart first has items.
+  const viewed = useRef(false);
+  useEffect(() => {
+    if (!viewed.current && items.length) {
+      viewed.current = true;
+      track("view_cart", items.map(cartItem));
+    }
+  }, [items]);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
@@ -65,6 +76,7 @@ export default function CartClient({ recommended }: { recommended: WooProduct[] 
             {/* Plain <a>, not next/link: this leaves the SPA entirely for WP's native checkout. */}
             <a
               href={checkoutUrl(items)}
+              onClick={() => track("begin_checkout", items.map(cartItem))}
               className="block text-center w-full bg-brand hover:bg-brand-dark text-white rounded-full py-3.5 font-bold transition-colors"
             >
               מעבר לתשלום
