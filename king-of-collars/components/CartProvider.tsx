@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import type { Cart, CartItem, WooProduct } from "@/lib/types";
 import * as api from "@/lib/cart";
+import { cartItem, productItem, track } from "@/lib/analytics";
 
 interface Ctx {
   cart: Cart | null;
@@ -78,6 +79,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const add: Ctx["add"] = async (id, qty = 1, variation, product) => {
     setOpen(true);
+    if (product) track("add_to_cart", [productItem(product, qty)]);
 
     if (!product) {
       // No listing data to build a placeholder from — fall back to the old blocking path.
@@ -178,6 +180,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   };
   const remove: Ctx["remove"] = async (key) => {
+    const removed = cart?.items.find((it) => it.key === key);
+    if (removed) track("remove_from_cart", [cartItem(removed)]);
     // Optimistic path: drop the item immediately, reconcile in the background.
     const before = cart;
     setCart((prev) => {

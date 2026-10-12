@@ -51,7 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-PNF2YEZ9DV');
+            gtag('config', 'G-PNF2YEZ9DV', {
+              linker: { domains: ['checkout.kingofcollars.com'] },
+              debug_mode: location.search.indexOf('ga_debug=1') > -1 || undefined,
+            });
           `}
         </Script>
       </head>
