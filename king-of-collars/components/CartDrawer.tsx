@@ -68,7 +68,7 @@ export default function CartDrawer() {
             {/* Plain <a>, not next/link: this leaves the SPA entirely for WP's native checkout. */}
             <a
               href={checkoutUrl(items)}
-              onClick={() => track("begin_checkout", items.map(cartItem))}
+              onClick={() => track("checkout_click", items.map(cartItem))}
               className="block text-center bg-brand text-white rounded-full py-3 font-semibold hover:bg-brand-dark"
             >
               תשלום מהיר
