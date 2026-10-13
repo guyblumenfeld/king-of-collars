@@ -63,13 +63,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // jump down then back up. Only the response matching the latest generation is applied.
   const updateGen = useRef<Map<string, number>>(new Map());
 
+  // Cart calls still waiting on the server. An earlier response describes the cart before the
+  // later clicks were applied, so showing it would flash removed items back (gone, back, gone).
+  const inflight = useRef(0);
+  const mutate = async <T,>(fn: () => Promise<T>) => {
+    inflight.current++;
+    try {
+      return await fn();
+    } finally {
+      inflight.current--;
+    }
+  };
+  // Show a server cart only when no newer change is pending; always remember it as confirmed.
+  const settle = (fresh: Cart) => {
+    lastConfirmedCart.current = fresh;
+    if (inflight.current === 0 && updateTimers.current.size === 0) setCart(fresh);
+  };
+
   // If a cart call failed with the server's own cart attached (409 invalid key etc.), show that
   // instead of rolling back to our possibly stale snapshot, so the UI matches the server.
   const syncFromError = (e: unknown) => {
     const synced = (e as { cart?: Cart }).cart;
     if (!synced) return false;
-    lastConfirmedCart.current = synced;
-    setCart(synced);
+    settle(synced);
     return true;
   };
 
@@ -95,9 +111,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       // No listing data to build a placeholder from — fall back to the old blocking path.
       setLoading(true);
       try {
-        const fresh = await api.addItem(id, qty, variation);
-        lastConfirmedCart.current = fresh;
-        setCart(fresh);
+        const fresh = await mutate(() => api.addItem(id, qty, variation));
+        settle(fresh);
       } finally {
         setLoading(false);
       }
@@ -124,9 +139,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
 
     try {
-      const fresh = await api.addItem(id, qty, variation);
-      lastConfirmedCart.current = fresh;
-      setCart(fresh);
+      const fresh = await mutate(() => api.addItem(id, qty, variation));
+      settle(fresh);
     } catch (e) {
       // Roll back to the last server-confirmed state; the button-level UI shows its own error.
       setCart(before ?? lastConfirmedCart.current);
@@ -186,12 +200,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setTimeout(async () => {
         timers.delete(key);
         try {
-          const fresh = await api.updateItem(key, qty);
+          const fresh = await mutate(() => api.updateItem(key, qty));
           // Discard this response if a newer click for the same item has since fired —
           // otherwise an out-of-order server response can stomp the newer optimistic state.
           if (gens.get(key) !== myGen) return;
-          lastConfirmedCart.current = fresh;
-          setCart(fresh);
+          settle(fresh);
         } catch (e) {
           if (gens.get(key) !== myGen) return;
           if (syncFromError(e)) return;
@@ -225,9 +238,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setPendingKeys((prev) => new Set(prev).add(key));
 
     try {
-      const fresh = await api.removeItem(key);
-      lastConfirmedCart.current = fresh;
-      setCart(fresh);
+      const fresh = await mutate(() => api.removeItem(key));
+      settle(fresh);
     } catch (e) {
       if (syncFromError(e)) return;
       setCart(before ?? lastConfirmedCart.current);
