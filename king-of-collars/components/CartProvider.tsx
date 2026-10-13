@@ -124,6 +124,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
   const update: Ctx["update"] = async (key, qty) => {
+    // Going below 1 is a removal. The Store API's update-item rejects quantity 0, which made the
+    // optimistic 0 snap back to 1 after the failed call, so route it through remove-item instead.
+    if (qty < 1) {
+      const pending = updateTimers.current.get(key);
+      if (pending) clearTimeout(pending);
+      updateTimers.current.delete(key);
+      return remove(key);
+    }
     // +/- buttons: report the quantity change as add/remove (the item may be removed via qty 0).
     const current = cart?.items.find((it) => it.key === key);
     if (current && qty !== current.quantity) {
