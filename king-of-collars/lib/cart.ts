@@ -32,7 +32,16 @@ function lsSet(k: string, v: string | null) {
 let token: string | null = lsGet(TOKEN_KEY);
 let nonce: string | null = lsGet(NONCE_KEY);
 
-async function call<T = Cart>(path: string, opts: RequestInit = {}): Promise<T> {
+// WooCommerce saves the cart session last-write-wins, so two overlapping cart requests can undo
+// each other (a removed item comes back). Run every cart call one at a time, in click order.
+let chain: Promise<unknown> = Promise.resolve();
+function call<T = Cart>(path: string, opts: RequestInit = {}): Promise<T> {
+  const run = chain.then(() => doCall<T>(path, opts));
+  chain = run.catch(() => {});
+  return run;
+}
+
+async function doCall<T = Cart>(path: string, opts: RequestInit = {}): Promise<T> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     Accept: "application/json",
