@@ -124,6 +124,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
   const update: Ctx["update"] = async (key, qty) => {
+    // +/- buttons: report the quantity change as add/remove (the item may be removed via qty 0).
+    const current = cart?.items.find((it) => it.key === key);
+    if (current && qty !== current.quantity) {
+      const delta = qty - current.quantity;
+      track(delta > 0 ? "add_to_cart" : "remove_from_cart", [{ ...cartItem(current), quantity: Math.abs(delta) }]);
+    }
     // Optimistic path: reflect the new quantity/total immediately and always (every
     // click updates local state), but debounce the server call so rapid +/- clicks
     // collapse into one round-trip instead of one per click.
