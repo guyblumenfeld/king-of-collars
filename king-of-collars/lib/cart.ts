@@ -57,13 +57,16 @@ async function call<T = Cart>(path: string, opts: RequestInit = {}): Promise<T> 
   if (!res.ok) {
     // Woo returns {code, message} — surface the message (e.g. missing checkout field).
     let msg = `Cart error ${res.status}`;
+    let cart: Cart | undefined;
     try {
       const body = await res.json();
       if (body?.message) msg = body.message;
+      // 409s (e.g. woocommerce_rest_cart_invalid_key) carry the server's real cart in data.cart.
+      cart = body?.data?.cart;
     } catch {
       /* non-JSON error body */
     }
-    throw new Error(msg);
+    throw Object.assign(new Error(msg), { cart });
   }
   return res.json() as Promise<T>;
 }

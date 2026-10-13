@@ -63,6 +63,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // jump down then back up. Only the response matching the latest generation is applied.
   const updateGen = useRef<Map<string, number>>(new Map());
 
+  // If a cart call failed with the server's own cart attached (409 invalid key etc.), show that
+  // instead of rolling back to our possibly stale snapshot, so the UI matches the server.
+  const syncFromError = (e: unknown) => {
+    const synced = (e as { cart?: Cart }).cart;
+    if (!synced) return false;
+    lastConfirmedCart.current = synced;
+    setCart(synced);
+    return true;
+  };
+
   const refresh = useCallback(async () => {
     try {
       const fresh = await api.getCart();
@@ -184,6 +194,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           setCart(fresh);
         } catch (e) {
           if (gens.get(key) !== myGen) return;
+          if (syncFromError(e)) return;
           // ponytail: swallowed before, so a failed update-item (e.g. the known 409
           // "cart item not found" issue) silently snapped the quantity back with no
           // visible cause — at minimum log it so devtools/Vercel logs show why.
@@ -218,6 +229,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       lastConfirmedCart.current = fresh;
       setCart(fresh);
     } catch (e) {
+      if (syncFromError(e)) return;
       setCart(before ?? lastConfirmedCart.current);
       throw e;
     } finally {
