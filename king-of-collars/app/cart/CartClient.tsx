@@ -5,6 +5,7 @@ import { useCart } from "@/components/CartProvider";
 import { cartItem, track } from "@/lib/analytics";
 import { formatPrice, freeShippingMessage, checkoutUrl } from "@/lib/woo";
 import ProductCard from "@/components/ProductCard";
+import ShippingInfo from "@/components/ShippingInfo";
 import type { WooProduct } from "@/lib/types";
 
 export default function CartClient({ recommended }: { recommended: WooProduct[] }) {
@@ -81,10 +82,11 @@ export default function CartClient({ recommended }: { recommended: WooProduct[] 
             >
               מעבר לתשלום
             </a>
-            <p className="text-xs text-gray-400 text-center mt-2">
-              משלוח עד הבית, איסוף מנקודת חלוקה (UPS) או איסוף עצמי
-            </p>
+            <Link href="/products/" className="block text-center text-brand text-sm font-semibold mt-3 hover:underline">
+              ← חזרה לחנות
+            </Link>
           </div>
+          <ShippingInfo compact />
         </>
       )}
 

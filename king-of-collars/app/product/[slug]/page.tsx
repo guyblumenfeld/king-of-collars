@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { listProducts, getProductBySlug, formatPrice } from "@/lib/woo";
 import AddToCart from "@/components/AddToCart";
 import ViewItem from "@/components/ViewItem";
+import ShippingInfo from "@/components/ShippingInfo";
 import ProductGallery from "./ProductGallery";
 
 export const dynamic = "force-static";
@@ -62,6 +63,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
         <ViewItem product={product} />
         <AddToCart product={product} />
+        <ShippingInfo />
       </div>
 
       {product.description && (

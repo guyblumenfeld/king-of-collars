@@ -80,6 +80,13 @@ export default function CartDrawer() {
             >
               לעמוד העגלה
             </Link>
+            <Link
+              href="/products/"
+              onClick={() => setOpen(false)}
+              className="block text-center text-gray-500 text-sm hover:underline"
+            >
+              ← חזרה לחנות
+            </Link>
           </div>
         )}
       </aside>
