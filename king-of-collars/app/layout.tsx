@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import WhatsAppTracker from "@/components/WhatsAppTracker";
 import AccessibilityWidget from "@/components/AccessibilityWidget";
 
 // Self-hosted at build time (no render-blocking request to fonts.googleapis.com).
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <CartDrawer />
           <WhatsAppButton />
+          <WhatsAppTracker />
           <AccessibilityWidget />
         </CartProvider>
       </body>
