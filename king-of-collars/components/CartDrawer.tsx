@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useEffect } from "react";
 import { useCart } from "./CartProvider";
 import { formatPrice, freeShippingMessage, checkoutUrl } from "@/lib/woo";
 import { cartItem, track } from "@/lib/analytics";
@@ -7,6 +8,12 @@ import { cartItem, track } from "@/lib/analytics";
 export default function CartDrawer() {
   const { cart, open, setOpen, update, remove, pendingKeys } = useCart();
   const items = cart?.items ?? [];
+
+  // One event per drawer opening (the cart page fires its own view_cart); only when there is something in it.
+  useEffect(() => {
+    if (open && items.length) track("view_cart_drawer", items.map(cartItem));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fire on open only, not on every quantity change
+  }, [open]);
 
   return (
     <>
