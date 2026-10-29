@@ -12,6 +12,7 @@ export interface WooPrices {
   price: string;
   regular_price: string;
   sale_price: string;
+  currency_code: string;
   currency_minor_unit: number;
   currency_symbol: string;
   currency_prefix: string;
@@ -51,6 +52,7 @@ export interface WooProduct {
   slug: string;
   type: string; // simple | variable
   permalink: string;
+  sku?: string;
   description: string;
   short_description: string;
   prices: WooPrices;
