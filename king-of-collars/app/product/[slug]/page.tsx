@@ -37,8 +37,27 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   const onSale = product.on_sale;
 
+  // Product schema so Google (Merchant Center "Found by Google" crawl) uses this storefront URL, not the WP checkout host.
+  const minor = product.prices.currency_minor_unit ?? 0;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: plain(product.short_description || product.description),
+    image: (product.images || []).map((i) => i.src),
+    ...(product.sku ? { sku: product.sku } : {}),
+    offers: {
+      "@type": "Offer",
+      url: `https://kingofcollars.com/product/${product.slug}/`,
+      priceCurrency: product.prices.currency_code,
+      price: (Number(product.prices.price) / 10 ** minor).toFixed(minor),
+      availability: product.is_in_stock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+    },
+  };
+
   return (
     <div className="max-w-content mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ProductGallery images={product.images} name={product.name} />
 
       <div>
