@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { CATEGORY_CONTENT } from "@/lib/category-content";
 import type { WooProduct, WooCategory } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
 
@@ -27,9 +29,16 @@ export default function ProductsClient({
 
       <div className="flex flex-wrap gap-2 mb-8">
         <FilterBtn label="הכול" on={active === "all"} onClick={() => setActive("all")} />
-        {categories.filter((c) => c.slug !== "general").map((c) => (
-          <FilterBtn key={c.id} label={c.name} on={active === c.slug} onClick={() => setActive(c.slug)} />
-        ))}
+        {categories.filter((c) => c.slug !== "general").map((c) =>
+          CATEGORY_CONTENT[c.slug] ? (
+            // real link to the category page (crawlable, own URL)
+            <Link key={c.id} href={`/category/${c.slug}/`} className="px-4 py-2 rounded-full text-sm border bg-white border-gray-300 hover:border-brand">
+              {c.name}
+            </Link>
+          ) : (
+            <FilterBtn key={c.id} label={c.name} on={active === c.slug} onClick={() => setActive(c.slug)} />
+          )
+        )}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
