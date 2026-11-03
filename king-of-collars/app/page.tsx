@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { listProducts, listCategories } from "@/lib/woo";
 import { LOCAL_POSTS } from "@/lib/local-posts";
+import { CATEGORY_CONTENT } from "@/lib/category-content";
 import ProductCard from "@/components/ProductCard";
 import { CollarIcon, BallIcon, PawIcon, TruckIcon, ReturnIcon, ShieldIcon } from "@/components/icons";
 
@@ -79,7 +80,7 @@ export default async function Home() {
             return (
               <Link
                 key={c.id}
-                href={`/products/?cat=${c.slug}`}
+                href={CATEGORY_CONTENT[c.slug] ? `/category/${c.slug}/` : `/products/?cat=${c.slug}`}
                 className="group bg-white rounded-2xl p-7 text-center border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand/30 hover:-translate-y-0.5 transition"
               >
                 <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-brand/10 text-brand grid place-items-center group-hover:bg-brand group-hover:text-white transition overflow-hidden">
