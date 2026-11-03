@@ -46,8 +46,27 @@ export default async function ProductPage({ params }: { params: { slug: string }
     description: plain(product.short_description || product.description),
     image: (product.images || []).map((i) => i.src),
     ...(product.sku ? { sku: product.sku } : {}),
+    brand: { "@type": "Brand", name: "King of Collars" },
     offers: {
       "@type": "Offer",
+      // Mirrors app/terms/page.tsx (14-day return, 1-5 business days delivery in Israel).
+      // ponytail: no shippingRate, the fee below the free-shipping thresholds isn't stated in the terms.
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "IL",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/ReturnShippingFees",
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "IL" },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          transitTime: { "@type": "QuantitativeValue", minValue: 1, maxValue: 5, unitCode: "DAY" },
+        },
+      },
       url: `https://kingofcollars.com/product/${product.slug}/`,
       priceCurrency: product.prices.currency_code,
       price: (Number(product.prices.price) / 10 ** minor).toFixed(minor),
