@@ -6,9 +6,8 @@ export default function Footer() {
     <footer className="bg-ink text-white mt-16">
       <div className="max-w-content mx-auto px-4 py-12 grid gap-8 md:grid-cols-4 text-sm">
         <div>
-          <div className="flex items-center gap-2.5 text-lg font-extrabold mb-3">
-            <Logo size={34} />
-            אלוף הקולרים
+          <div className="inline-block bg-white rounded-xl px-3 py-2 mb-3">
+            <Logo className="h-10" />
           </div>
           <p className="text-white/70 leading-relaxed">
             אביזרים איכותיים לכלבים - רצועות, קולרים, ביגוד ומשחקים. נבחרים בקפידה, נשלחים באהבה.
@@ -30,7 +29,7 @@ export default function Footer() {
           <p className="text-white/70 leading-relaxed">
             משלוח חינם מעל ₪150 לנקודת חלוקה / ₪300 עד הבית.
             <br />
-            אספקה 1-5 ימי עסקים · החזרה תוך 30 יום.
+            אספקה 1-5 ימי עסקים · ביטול והחזרה תוך 14 יום.
             <br />
             איסוף עצמי: קיבוץ אורים.
           </p>
