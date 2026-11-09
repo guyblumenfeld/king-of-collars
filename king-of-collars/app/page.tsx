@@ -24,12 +24,32 @@ const CAT_IMAGE: Record<string, string> = {
   costumes: "/icons/costumes.png",
 };
 
+// Photo tiles (public/images/categories/<slug>.jpg); categories without one keep the icon tile.
+const CAT_PHOTO: Record<string, string> = {
+  "leashes-collars": "/images/categories/leashes-collars.jpg",
+  toys: "/images/categories/toys.jpg",
+  "dog-mental-games": "/images/categories/dog-mental-games.jpg",
+  "dog-cleaning": "/images/categories/dog-cleaning.jpg",
+  costumes: "/images/categories/costumes.jpg",
+  accessories: "/images/categories/accessories.jpg",
+  beds: "/images/categories/beds.jpg",
+};
+
 export default async function Home() {
-  const [allFeatured, categories] = await Promise.all([
-    listProducts({ per_page: 24 }),
+  const [popular, newest, categories] = await Promise.all([
+    listProducts({ per_page: 24, orderby: "popularity", order: "desc" }),
+    listProducts({ per_page: 24, orderby: "date", order: "desc" }),
     listCategories(),
   ]);
-  const products = allFeatured.slice(0, 8);
+  // out-of-stock products are hidden on the homepage unless nothing else is available
+  const inStockOnly = <T extends { is_in_stock: boolean }>(list: T[]) => {
+    const ok = list.filter((p) => p.is_in_stock);
+    return ok.length ? ok : list;
+  };
+  const products = inStockOnly(popular).slice(0, 8);
+  // newest products that aren't already in the featured grid above
+  const shown = new Set(products.map((p) => p.id));
+  const recent = inStockOnly(newest).filter((p) => !shown.has(p.id)).slice(0, 8);
   const cats = categories.filter((c) => c.count > 0 && c.slug !== "general");
   const posts = LOCAL_POSTS.slice(0, 3);
 
@@ -77,6 +97,23 @@ export default async function Home() {
           {cats.map((c) => {
             const image = CAT_IMAGE[c.slug];
             const Icon = CAT_ICON[c.slug] ?? PawIcon;
+            const photo = CAT_PHOTO[c.slug];
+            if (photo) {
+              return (
+                <Link
+                  key={c.id}
+                  href={`/category/${c.slug}/`}
+                  className="group relative block overflow-hidden rounded-2xl min-h-[300px] hover:shadow-lg transition"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photo} alt={c.name} className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5 pt-16 text-right text-white">
+                    <div className="text-xl font-extrabold">{c.name}</div>
+                    <div className="text-xs text-white/80 mt-0.5">{c.count} מוצרים</div>
+                  </div>
+                </Link>
+              );
+            }
             return (
               <Link
                 key={c.id}
@@ -96,6 +133,13 @@ export default async function Home() {
               </Link>
             );
           })}
+          {/* 7 category tiles + this one fill the 4-column grid */}
+          <Link
+            href="/products/"
+            className="flex min-h-[260px] items-center justify-center rounded-2xl bg-brand text-center text-white text-2xl font-extrabold hover:bg-brand-dark transition"
+          >
+            לכל המוצרים ←
+          </Link>
         </div>
       </section>
 
@@ -157,7 +201,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
           {[
             { Icon: TruckIcon, title: "משלוח מהיר", sub: "אספקה תוך 1-5 ימי עסקים" },
-            { Icon: ReturnIcon, title: "החזרה תוך 30 יום", sub: "אחריות מלאה על כל המוצרים" },
+            { Icon: ReturnIcon, title: "ביטול והחזרה תוך 14 יום", sub: "בכפוף לתנאי התקנון" },
             { Icon: ShieldIcon, title: "תשלום מאובטח", sub: "קנייה בטוחה ומאובטחת" },
           ].map(({ Icon, title, sub }) => (
             <div key={title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 text-right">
@@ -172,6 +216,23 @@ export default async function Home() {
           ))}
         </div>
       </section>
+
+      {/* Recently added */}
+      {recent.length > 0 && (
+        <section className="max-w-content mx-auto px-4 pb-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-extrabold">נוספו לאחרונה</h2>
+            <Link href="/products/" className="text-brand text-sm font-bold hover:underline">
+              לכל המוצרים ←
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {recent.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
