@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
     offers: {
       "@type": "Offer",
       // Mirrors app/terms/page.tsx (14-day return, 1-5 business days delivery in Israel).
-      // ponytail: no shippingRate, the fee below the free-shipping thresholds isn't stated in the terms.
+      // ponytail: no returnShippingFeesAmount, customer arranges and pays own return shipping (amount unknowable).
       hasMerchantReturnPolicy: {
         "@type": "MerchantReturnPolicy",
         applicableCountry: "IL",
@@ -59,14 +59,17 @@ export default async function ProductPage({ params }: { params: { slug: string }
         returnMethod: "https://schema.org/ReturnByMail",
         returnFees: "https://schema.org/ReturnShippingFees",
       },
-      shippingDetails: {
+      // Fees below the free-shipping thresholds: UPS pickup 15, home 30 (ILS). Update if checkout rates change.
+      shippingDetails: [15, 30].map((fee) => ({
         "@type": "OfferShippingDetails",
+        shippingRate: { "@type": "MonetaryAmount", value: fee, currency: "ILS" },
         shippingDestination: { "@type": "DefinedRegion", addressCountry: "IL" },
         deliveryTime: {
           "@type": "ShippingDeliveryTime",
+          handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
           transitTime: { "@type": "QuantitativeValue", minValue: 1, maxValue: 5, unitCode: "DAY" },
         },
-      },
+      })),
       url: `https://kingofcollars.com/product/${product.slug}/`,
       priceCurrency: product.prices.currency_code,
       price: (Number(product.prices.price) / 10 ** minor).toFixed(minor),
