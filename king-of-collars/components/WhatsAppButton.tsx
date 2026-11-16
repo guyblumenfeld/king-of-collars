@@ -1,7 +1,19 @@
+"use client";
+import { WA_GENERIC, waLink } from "@/lib/whatsapp";
+
+// Product pages prefill the product name + page URL; everywhere else a generic greeting.
+// The href is rewritten on click (not in an effect) so it always reflects the current page and <title>.
+function messageHref() {
+  if (!location.pathname.startsWith("/product/")) return WA_GENERIC;
+  const name = document.title.replace(/ - אלוף הקולרים$/, "");
+  return waLink(`היי אלוף :), אשמח לשאול על ${name} ${location.origin}${location.pathname}`);
+}
+
 export default function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/972553186689"
+      href={WA_GENERIC}
+      onClick={(e) => { e.currentTarget.href = messageHref(); }}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="צ׳אט בוואטסאפ"
