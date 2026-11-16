@@ -19,8 +19,9 @@ export default function CartDrawer() {
     <>
       {open && <div className="fixed inset-0 bg-black/40 z-40" onClick={() => setOpen(false)} />}
       <aside
-        className={`fixed top-0 bottom-0 left-0 w-full max-w-sm bg-white z-50 shadow-2xl flex flex-col transition-transform ${
-          open ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 bottom-0 left-0 w-full max-w-sm bg-white z-50 shadow-2xl flex flex-col transition-[transform,visibility] ${
+          // ponytail: `invisible` when closed so the off-screen drawer can't add scrollable width on RTL Android Chrome (page wobbled sideways, no vertical scroll)
+          open ? "translate-x-0" : "-translate-x-full invisible"
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b">

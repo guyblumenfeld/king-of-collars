@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WA_GENERIC } from "@/lib/whatsapp";
 import Logo from "./Logo";
 
 export default function Footer() {
@@ -16,10 +17,10 @@ export default function Footer() {
         <div>
           <div className="font-bold mb-3">ניווט</div>
           <ul className="space-y-2 text-white/80">
-            <li><Link href="/products" className="hover:text-white transition">החנות</Link></li>
+            <li><Link href="/products" className="hover:text-white transition">חנות</Link></li>
             <li><Link href="/about" className="hover:text-white transition">אודות</Link></li>
             <li><Link href="/contact" className="hover:text-white transition">יצירת קשר</Link></li>
-            <li><Link href="/blog" className="hover:text-white transition">הבלוג</Link></li>
+            <li><Link href="/blog" className="hover:text-white transition">בלוג</Link></li>
             <li><Link href="/accessibility-statement" className="hover:text-white transition">הצהרת נגישות</Link></li>
             <li><Link href="/terms" className="hover:text-white transition">תקנון ומדיניות פרטיות</Link></li>
           </ul>
@@ -38,7 +39,7 @@ export default function Footer() {
           <div className="font-bold mb-3">שירות לקוחות</div>
           <p className="text-white/70 leading-relaxed">
             וואטסאפ:{" "}
-            <a href="https://wa.me/972553186689" className="underline hover:text-white transition" target="_blank" rel="noopener noreferrer">
+            <a href={WA_GENERIC} className="underline hover:text-white transition" target="_blank" rel="noopener noreferrer">
               055-318-6689
             </a>
             <br />

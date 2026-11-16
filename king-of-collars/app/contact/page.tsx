@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { WA_GENERIC } from "@/lib/whatsapp";
 
 export const dynamic = "force-static";
 
@@ -25,7 +26,7 @@ export default function ContactPage() {
       <section className="max-w-3xl mx-auto px-4 py-12 space-y-6 leading-relaxed">
         <p>
           הדרך הכי מהירה לקבל מענה היא וואטסאפ:{" "}
-          <a href="https://wa.me/972553186689" className="text-brand underline" target="_blank" rel="noopener noreferrer">
+          <a href={WA_GENERIC} className="text-brand underline" target="_blank" rel="noopener noreferrer">
             055-318-6689
           </a>
           , בימים א׳-ה׳ בין 9:00 ל־18:00.

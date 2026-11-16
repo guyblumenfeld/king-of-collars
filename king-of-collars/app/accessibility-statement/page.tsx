@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { WA_GENERIC } from "@/lib/whatsapp";
 
 export const dynamic = "force-static";
 
@@ -40,7 +41,7 @@ export default function AccessibilityStatementPage() {
       <h2>פנייה בנושא נגישות</h2>
       <p>
         נתקלתם בבעיה? אפשר לפנות אלינו בוואטסאפ:{" "}
-        <a href="https://wa.me/972553186689" className="text-brand underline" target="_blank" rel="noopener noreferrer">
+        <a href={WA_GENERIC} className="text-brand underline" target="_blank" rel="noopener noreferrer">
           055-318-6689
         </a>{" "}
         (ימים א׳-ה׳, 9:00-18:00). אנא ציינו את הדף ואת הבעיה שנתקלתם בה, ונחזור אליכם בהקדם.

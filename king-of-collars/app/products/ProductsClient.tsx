@@ -25,7 +25,7 @@ export default function ProductsClient({
 
   return (
     <div className="max-w-content mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold mb-6">החנות</h1>
+      <h1 className="text-2xl font-bold mb-6">חנות</h1>
 
       <div className="flex flex-wrap gap-2 mb-8">
         <FilterBtn label="הכול" on={active === "all"} onClick={() => setActive("all")} />

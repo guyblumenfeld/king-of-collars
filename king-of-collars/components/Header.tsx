@@ -19,9 +19,9 @@ export default function Header() {
           </Link>
           <nav aria-label="ניווט ראשי" className="hidden md:flex gap-5 lg:gap-8 text-lg lg:text-xl font-bold whitespace-nowrap">
             <Link href="/" className="hover:text-brand transition">דף הבית</Link>
-            <Link href="/products" className="hover:text-brand transition">החנות</Link>
+            <Link href="/products" className="hover:text-brand transition">חנות</Link>
             <Link href="/about" className="hover:text-brand transition">אודות</Link>
-            <Link href="/blog" className="hover:text-brand transition">הבלוג</Link>
+            <Link href="/blog" className="hover:text-brand transition">בלוג</Link>
           </nav>
           <button
             onClick={() => setOpen(true)}

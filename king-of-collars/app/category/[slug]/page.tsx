@@ -7,6 +7,17 @@ import ProductCard from "@/components/ProductCard";
 
 export const dynamic = "force-static";
 
+// Banner crop focus per category photo (public/images/categories/<slug>.jpg), so the dog's face stays in the wide crop.
+const FOCUS: Record<string, string> = {
+  accessories: "50% 28%",
+  beds: "50% 40%",
+  costumes: "50% 28%",
+  "dog-cleaning": "70% 30%",
+  "dog-mental-games": "50% 50%",
+  "leashes-collars": "50% 12%",
+  toys: "50% 25%",
+};
+
 export async function generateStaticParams() {
   return Object.keys(CATEGORY_CONTENT).map((slug) => ({ slug }));
 }
@@ -43,9 +54,19 @@ export default async function CategoryPage({ params }: { params: { slug: string 
     <div className="max-w-content mx-auto px-4 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <nav className="text-sm text-gray-500 mb-4">
-        <Link href="/products/" className="hover:underline">החנות</Link> / {c.h1}
+        <Link href="/products/" className="hover:underline">חנות</Link> / {c.h1}
       </nav>
-      <h1 className="text-2xl font-bold mb-6">{c.h1}</h1>
+      <div className="relative overflow-hidden rounded-2xl mb-6 h-48 md:h-72 bg-brand-dark">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/images/categories/${params.slug}.jpg`}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: FOCUS[params.slug] ?? "50% 30%" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        <h1 className="absolute bottom-0 inset-x-0 p-5 text-2xl md:text-3xl font-extrabold text-white">{c.h1}</h1>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
         {products.map((p) => <ProductCard key={p.id} product={p} />)}
