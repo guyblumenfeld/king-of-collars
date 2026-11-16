@@ -38,7 +38,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
   if (!c) notFound();
   const [all, cats] = await Promise.all([listProducts({ per_page: 100 }), listCategories()]);
   const products = all.filter((p) => p.categories.some((x) => x.slug === params.slug));
-  const others = cats.filter((x) => x.count > 0 && CATEGORY_CONTENT[x.slug] && x.slug !== params.slug);
+  const tabs = cats.filter((x) => x.slug !== "general" && CATEGORY_CONTENT[x.slug] && (x.count > 0 || x.slug === params.slug));
 
   const faqLd = {
     "@context": "https://schema.org",
@@ -56,6 +56,22 @@ export default async function CategoryPage({ params }: { params: { slug: string 
       <nav className="text-sm text-gray-500 mb-4">
         <Link href="/products/" className="hover:underline">חנות</Link> / {c.h1}
       </nav>
+      {/* same filter row as /products, on every category page, current category highlighted */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Link href="/products/" className="px-4 py-2 rounded-full text-sm border bg-white border-gray-300 hover:border-brand">הכול</Link>
+        {tabs.map((t) => (
+          <Link
+            key={t.id}
+            href={`/category/${t.slug}/`}
+            aria-current={t.slug === params.slug ? "page" : undefined}
+            className={`px-4 py-2 rounded-full text-sm border ${
+              t.slug === params.slug ? "bg-brand text-white border-brand" : "bg-white border-gray-300 hover:border-brand"
+            }`}
+          >
+            {t.name}
+          </Link>
+        ))}
+      </div>
       <div className="relative overflow-hidden rounded-2xl mb-6 h-48 md:h-72 bg-brand-dark">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -103,14 +119,6 @@ export default async function CategoryPage({ params }: { params: { slug: string 
           סגור ולא משומש. לפרטים מלאים: <Link href="/terms/" className="text-brand underline">התקנון</Link>.
         </p>
       </section>
-
-      <div className="flex flex-wrap gap-2">
-        {others.map((o) => (
-          <Link key={o.id} href={`/category/${o.slug}/`} className="px-4 py-2 rounded-full text-sm border bg-white border-gray-300 hover:border-brand">
-            {o.name}
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }
