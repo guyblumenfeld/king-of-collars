@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { WA_GENERIC } from "@/lib/whatsapp";
 import Link from "next/link";
 import { PawIcon, ShieldIcon, TruckIcon } from "@/components/icons";
 
@@ -71,7 +72,7 @@ export default function AboutPage() {
           דמי המשלוח.
           <br />
           אנחנו זמינים בוואטסאפ{" "}
-          <a href="https://wa.me/972553186689" className="text-brand underline" target="_blank" rel="noopener noreferrer">
+          <a href={WA_GENERIC} className="text-brand underline" target="_blank" rel="noopener noreferrer">
             055-318-6689
           </a>{" "}
           בימים א׳-ה׳ בין 9:00 ל־18:00.
