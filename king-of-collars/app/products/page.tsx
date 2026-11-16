@@ -5,7 +5,7 @@ import ProductsClient from "./ProductsClient";
 
 export const dynamic = "force-static";
 
-const TITLE = "החנות - אלוף הקולרים";
+const TITLE = "חנות - אלוף הקולרים";
 const DESCRIPTION = "כל המוצרים: רצועות, קולרים, ביגוד ומשחקים לכלבים. משלוח מהיר עד הבית.";
 
 export const metadata: Metadata = {
